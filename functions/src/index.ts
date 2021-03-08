@@ -13,8 +13,15 @@ export const omdbapiSearch = functions.https.onRequest((request, response) => {
         if (results["Response"] == "True") {
           response.json(results);
         }
-      }).catch((error) => {
-        response.send(error);
+      }).catch(function(err) {
+        const respErr = JSON.parse(err.error);
+        const errorResult = {
+          origUrl: respErr.origUrl,
+          error: respErr,
+        };
+        results.push(errorResult);
+      }).catch(function(err) {
+        console.error(err);
       });
   // response.send(results);
 });
@@ -28,8 +35,16 @@ export const omdbapiMovie = functions.https.onRequest((request, response) => {
         if (results["Response"] == "True") {
           response.json(results);
         }
+      }).catch(function(err) {
+        const respErr = JSON.parse(err.error);
+        const errorResult = {
+          origUrl: respErr.origUrl,
+          error: respErr,
+        };
+        results.push(errorResult);
+      }).catch(function(err) {
+        console.error(err);
       });
-  // response.send(results);
 });
 
 export const omdbapi = functions.https.onCall((data, context) => {
@@ -44,3 +59,4 @@ export const omdbapi = functions.https.onCall((data, context) => {
       // }
       });
 });
+
